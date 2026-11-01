@@ -10,9 +10,10 @@ def http_trigger_demo_addition(req: func.HttpRequest) -> func.HttpResponse:
     # 1. Try to get values from query string parameters
     num1_raw = req.params.get('num1')
     num2_raw = req.params.get('num2')
+    num3_raw = req.params.get('num3')
 
     # 2. If missing from query parameters, look in the JSON request body
-    if not num1_raw or not num2_raw:
+    if not num1_raw or not num2_raw or not num3_raw:
         try:
             req_body = req.get_json()
         except ValueError:
@@ -23,15 +24,18 @@ def http_trigger_demo_addition(req: func.HttpRequest) -> func.HttpResponse:
                 num1_raw = req_body.get('num1')
             if not num2_raw:
                 num2_raw = req_body.get('num2')
+            if not num3_raw:
+                num3_raw = req_body.get('num3')
 
     # 3. If both parameters are found, try to convert them to integers and sum them up
-    if num1_raw is not None and num2_raw is not None:
+    if num1_raw is not None and num2_raw is not None and num3_raw is not None:
         try:
             num1 = int(num1_raw)
             num2 = int(num2_raw)
-            result = num1 + num2
+            num3 = int(num3_raw)
+            result = num1 + num2 + num3
             return func.HttpResponse(
-                f"The sum of {num1} and {num2} is: {result}", 
+                f"The sum of {num1} , {num2} and {num3} is: {result}", 
                 status_code=200
             )
         except ValueError:
